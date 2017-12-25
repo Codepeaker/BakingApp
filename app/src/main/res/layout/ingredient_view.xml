@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ingredient_layout_id"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="@dimen/size_15">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bullet" />
+
+    <TextView
+        android:id="@+id/ingredient_tool_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_10"
+        android:layout_marginStart="@dimen/size_10"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/textsize_14"
+        tools:text=" SOME TEXT" />
+
+    <TextView
+        android:id="@+id/ingredient_name_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/size_5"
+        android:layout_marginStart="@dimen/size_5"
+        android:textStyle="bold"
+        tools:text="Some more text" />
+
+</LinearLayout>

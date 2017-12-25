@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_60">
+
+    <ImageView
+        android:id="@+id/bullet_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_10"
+        android:layout_marginStart="@dimen/size_10"
+        android:background="@drawable/bullet" />
+
+    <TextView
+        android:id="@+id/steps_text_id"
+        android:layout_width="@dimen/size_250"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/size_10"
+        android:layout_marginStart="@dimen/size_10"
+        android:layout_toEndOf="@id/bullet_id"
+        android:layout_toRightOf="@id/bullet_id"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="@dimen/textsize_12"
+        tools:text=" SOME TEXT" />
+
+    <ImageView
+        android:id="@+id/play_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/size_20"
+        android:layout_marginRight="@dimen/size_20"
+        android:src="@drawable/ic_play_arrow_black_24dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/margin_01"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/darker_gray" />
+
+</RelativeLayout>

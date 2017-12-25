@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/size_180">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/baking_image" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#46000000" />
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/size_20">
+
+        <TextView
+            android:id="@+id/dish_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/size_20"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_20"
+            tools:text="Neutella pie" />
+
+        <ImageView
+            android:id="@+id/cart_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dish_name"
+            android:layout_marginBottom="@dimen/size_10"
+            android:src="@drawable/ic_add_shopping_cart_white_24dp" />
+
+        <TextView
+            android:id="@+id/cart_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dish_name"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/cart_image"
+            android:layout_toRightOf="@+id/cart_image"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_14"
+            tools:text="17 ingredients" />
+
+        <ImageView
+            android:id="@+id/steps_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/cart_image"
+            android:layout_marginBottom="@dimen/size_10"
+            android:src="@drawable/ic_list_white_24dp" />
+
+        <TextView
+            android:id="@+id/steps_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cart_image"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/cart_image"
+            android:layout_toRightOf="@+id/cart_image"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_14"
+            tools:text="17 steps to prepare" />
+
+        <ImageView
+            android:id="@+id/serving_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/steps_image"
+            android:layout_marginBottom="@dimen/size_10"
+            android:src="@drawable/ic_room_service_white_24dp" />
+
+        <TextView
+            android:id="@+id/serving_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/steps_image"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/cart_image"
+            android:layout_toRightOf="@+id/cart_image"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/textsize_14"
+            tools:text="17 servings" />
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
