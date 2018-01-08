@@ -174,6 +174,7 @@ public class VideoFragment extends Fragment {
             simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources()
                     , R.drawable.ic_baking));
         }
+
         if (stepsBean.getThumbnailURL().isEmpty()) {
             thumbnailImageView.setVisibility(View.GONE);
         } else {
@@ -187,6 +188,7 @@ public class VideoFragment extends Fragment {
                     }).build();
             picasso.
                     load(stepsBean.getThumbnailURL()).
+                    placeholder(R.drawable.ic_baking).
                     into(thumbnailImageView);
         }
 
@@ -222,9 +224,11 @@ public class VideoFragment extends Fragment {
 
             MediaSource mediaSource = new ExtractorMediaSource(uri, mediaDataSourceFactory
                     , extractorsFactory, null, null);
+
             if (playerPosition != 0) {
                 exoPlayer.seekTo(playerPosition);
             }
+
             exoPlayer.prepare(mediaSource);
         }
     }
