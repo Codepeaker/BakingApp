@@ -5,9 +5,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -28,6 +30,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -59,6 +62,8 @@ public class VideoFragment extends Fragment {
     SimpleExoPlayer exoPlayer;
     Unbinder unbinder;
     Bundle data = null;
+    long playerPosition;
+    String currentVideoURL;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -66,6 +71,7 @@ public class VideoFragment extends Fragment {
     private BandwidthMeter bandwidthMeter;
     private DataSource.Factory mediaDataSourceFactory;
     private TrackSelector trackSelector;
+    private ImageView thumbnailImageView;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -121,6 +127,7 @@ public class VideoFragment extends Fragment {
         if (data.get(Constant.stepsPosition) == null) { //two pane layout
             position = 0;
         } else {
+            playerPosition = data.getLong("exoplayerPosition");
             position = (int) data.get(Constant.stepsPosition);
 
             if (((VideoActivity) getActivity()) != null) {
@@ -140,13 +147,12 @@ public class VideoFragment extends Fragment {
 
         }
 
-        initAction(stepsBeans.get(position), position, stepsBeans.size());
+        initAction(stepsBeans.get(position));
 
         return view;
     }
 
-
-    public void initAction(BakingModel.StepsBean stepsBean, int position, int size) {
+    public void initAction(BakingModel.StepsBean stepsBean) {
 
 
         bandwidthMeter = new DefaultBandwidthMeter();
@@ -156,20 +162,38 @@ public class VideoFragment extends Fragment {
 
 
         if (stepsBean == null) {
-
             return;
         }
+
+
         if (stepsBean.getVideoURL().isEmpty()) {
             simpleExoPlayerView.setVisibility(View.GONE);
+
         } else {
             simpleExoPlayerView.setVisibility(View.VISIBLE);
+            simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources()
+                    , R.drawable.ic_baking));
         }
+        if (stepsBean.getThumbnailURL().isEmpty()) {
+            thumbnailImageView.setVisibility(View.GONE);
+        } else {
+            thumbnailImageView.setVisibility(View.VISIBLE);
+            Picasso picasso = new Picasso.Builder(getActivity())
+                    .listener(new Picasso.Listener() {
+                        @Override
+                        public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                            Log.d("asd", "onImageLoadFailed: " + exception);
+                        }
+                    }).build();
+            picasso.
+                    load(stepsBean.getThumbnailURL()).
+                    into(thumbnailImageView);
+        }
+
 
         stepsTextView.setText(stepsBean.getDescription());
 
-
-        simpleExoPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources()
-                , R.drawable.ic_baking));
+        currentVideoURL = stepsBean.getVideoURL();
         initializePlayer(Uri.parse(stepsBean.getVideoURL()));
     }
 
@@ -177,10 +201,11 @@ public class VideoFragment extends Fragment {
 
         stepsTextView = view.findViewById(R.id.steps_text_id);
         simpleExoPlayerView = view.findViewById(R.id.player_view);
+        thumbnailImageView = view.findViewById(R.id.thumbnail_image);
 
     }
 
-    private void initializePlayer(Uri uri) {
+    public void initializePlayer(Uri uri) {
         if (exoPlayer == null) {
             TrackSelection.Factory videoTrackSelectionFactory =
                     new AdaptiveVideoTrackSelection.Factory(bandwidthMeter);
@@ -197,20 +222,29 @@ public class VideoFragment extends Fragment {
 
             MediaSource mediaSource = new ExtractorMediaSource(uri, mediaDataSourceFactory
                     , extractorsFactory, null, null);
+            if (playerPosition != 0) {
+                exoPlayer.seekTo(playerPosition);
+            }
             exoPlayer.prepare(mediaSource);
-
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(Uri.parse(currentVideoURL));
+    }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
+        playerPosition = exoPlayer.getCurrentPosition();
         releasePlayer();
     }
 
     public void releasePlayer() {
         if (exoPlayer != null) {
+            exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
         }

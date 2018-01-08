@@ -100,7 +100,7 @@ public class DetailActivity extends AppCompatActivity implements
 
             VideoFragment videoFragment = (VideoFragment) getSupportFragmentManager().findFragmentByTag("VideoFragment");
             videoFragment.releasePlayer();
-            videoFragment.initAction(stepsBeans.get(position), position, stepsBeans.size());
+            videoFragment.initAction(stepsBeans.get(position));
 
 
         } else {

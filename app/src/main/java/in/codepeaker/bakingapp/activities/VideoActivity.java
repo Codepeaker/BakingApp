@@ -120,13 +120,13 @@ public class VideoActivity extends AppCompatActivity
         switch (view.getId()) {
             case R.id.fab_next:
 
-                videoFragment.initAction(stepsBean.get(++position), position, stepsBean.size());
+                videoFragment.initAction(stepsBean.get(++position));
                 setFabVisibility();
                 break;
 
             case R.id.fab_previous:
 
-                videoFragment.initAction(stepsBean.get(--position), position, stepsBean.size());
+                videoFragment.initAction(stepsBean.get(--position));
                 setFabVisibility();
                 break;
         }
@@ -142,7 +142,6 @@ public class VideoActivity extends AppCompatActivity
             fabNext.show();
         }
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
