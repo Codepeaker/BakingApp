@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
             initAction();
         else {
             bakingModels = savedInstanceState.getParcelableArrayList("recipelist");
-            setRecyclerView(bakingModels);
+
+            if (bakingModels != null) setRecyclerView(bakingModels);
         }
     }
 

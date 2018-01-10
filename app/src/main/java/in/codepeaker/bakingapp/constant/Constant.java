@@ -18,4 +18,5 @@ public class Constant {
     public static final String fromWidget = "fromWidget";
     public static final String currentVideoURL = "currentVideoURL";
     public static final String recipeName = "recipeName";
+    public static final String playerState = "playerState";
 }

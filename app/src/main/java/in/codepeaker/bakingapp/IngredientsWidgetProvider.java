@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 import android.widget.RemoteViews;
 
 import com.google.gson.Gson;
@@ -43,8 +44,13 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
         if (data != null) {
             ingredientsBeans = data;
             svcIntent.putExtra(Constant.ingredientsString, json);
+            remoteViews.setViewVisibility(R.id.recipe_name_id, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.listViewWidget, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.empty_view, View.GONE);
         } else {
-
+            remoteViews.setViewVisibility(R.id.recipe_name_id, View.GONE);
+            remoteViews.setViewVisibility(R.id.listViewWidget, View.GONE);
+            remoteViews.setViewVisibility(R.id.empty_view, View.VISIBLE);
             return;
         }
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.listViewWidget);
@@ -77,9 +83,9 @@ public class IngredientsWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateWidgetListView(context, appWidgetManager, appWidgetId, null, "");
-        }
+//        for (int appWidgetId : appWidgetIds) {
+//            updateWidgetListView(context, appWidgetManager, appWidgetId, null, "");
+//        }
     }
 
     @Override

@@ -14,15 +14,17 @@
         android:gravity="center"
         android:padding="@dimen/size_10"
         android:textColor="@android:color/darker_gray"
-        android:textStyle="bold"
         android:textSize="@dimen/textsize_18"
+        android:textStyle="bold"
+        android:visibility="gone"
         tools:text="Recipe Name" />
 
     <!-- ListView to be shown on widget -->
     <ListView
         android:id="@+id/listViewWidget"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <!-- Empty view is show if list items are empty -->
     <TextView
@@ -31,7 +33,6 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/add_ingredient"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:visibility="gone" />
+        android:textColor="#000"
+        android:textSize="20sp" />
 </LinearLayout>

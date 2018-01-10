@@ -32,6 +32,7 @@ public class DetailActivity extends AppCompatActivity implements
         DetailFragment.OnFragmentInteractionListener,
         VideoFragment.OnFragmentInteractionListener {
 
+    public static int stepPosition;
     ArrayList<BakingModel.StepsBean> stepsBeans;
     ArrayList<BakingModel.IngredientsBean> ingredientsBeans;
     private boolean mTwoPane = false;
@@ -48,9 +49,17 @@ public class DetailActivity extends AppCompatActivity implements
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getParcelableArrayList("stepsBeans") != null) {
+                stepsBeans = savedInstanceState.getParcelableArrayList("stepsBeans");
+                return;
+            }
+        }
+
         Bundle data = getIntent().getExtras();
         if (data == null)
             return;
+
 
         if (data.get(Constant.fromWidget) != null && (boolean) data.get(Constant.fromWidget)) {
             int recipeposition = (int) data.get(Constant.fillInIntentRecipePosition);
@@ -74,21 +83,13 @@ public class DetailActivity extends AppCompatActivity implements
         }
 
 
-        if (findViewById(R.id.video_linear_layout) != null) {
-            mTwoPane = true;
+        if (getResources().getBoolean(R.bool.is_tablet)) {
 
-            if (savedInstanceState == null) {
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            VideoFragment videoFragment = new VideoFragment();
+            fragmentTransaction.add(R.id.video_container, videoFragment, "VideoFragment");
+            fragmentTransaction.commit();
 
-                FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                VideoFragment videoFragment = new VideoFragment();
-                fragmentTransaction.add(R.id.video_container, videoFragment, "VideoFragment");
-                fragmentTransaction.commit();
-
-//                videoFragment.initAction(stepsBeans.get(0), 0, stepsBeans.size());
-
-            }
-        } else {
-            mTwoPane = false;
         }
 
     }
@@ -96,10 +97,12 @@ public class DetailActivity extends AppCompatActivity implements
     @Override
     public void onFragmentInteraction(int position) {
 
-        if (mTwoPane) {
+        if (getResources().getBoolean(R.bool.is_tablet)) {
 
             VideoFragment videoFragment = (VideoFragment) getSupportFragmentManager().findFragmentByTag("VideoFragment");
             videoFragment.releasePlayer();
+            stepPosition = position;
+
             videoFragment.initAction(stepsBeans.get(position));
 
 
@@ -151,6 +154,13 @@ public class DetailActivity extends AppCompatActivity implements
         getMenuInflater().inflate(R.menu.detail_menu, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("stepsBeans", stepsBeans);
+
     }
 
     @Override
