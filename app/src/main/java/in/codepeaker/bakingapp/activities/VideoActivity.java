@@ -1,13 +1,11 @@
 package in.codepeaker.bakingapp.activities;
 
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -25,15 +23,13 @@ public class VideoActivity extends AppCompatActivity
         implements View.OnClickListener, VideoFragment.OnFragmentInteractionListener {
 
 
+    private static final String stepsBeanKey = "stepsBeanArrayList";
+    public static int position;
     @BindView(R.id.fab_next)
     public FloatingActionButton fabNext;
-
-
     @BindView(R.id.fab_previous)
     public FloatingActionButton fabPrevious;
-
-    int position;
-    ArrayList<BakingModel.StepsBean> stepsBean;
+    ArrayList<BakingModel.StepsBean> stepsBeanArrayList;
     Toolbar toolbar;
 
     @Override
@@ -61,18 +57,20 @@ public class VideoActivity extends AppCompatActivity
 
         ButterKnife.bind(this);
 
+        fabNext.setOnClickListener(this);
+        fabPrevious.setOnClickListener(this);
 
         if (savedInstanceState == null) {
             initScreen();
+        } else {
+            stepsBeanArrayList = savedInstanceState.getParcelableArrayList(stepsBeanKey);
         }
 
     }
 
-
     private void initScreen() {
 
-        fabNext.setOnClickListener(this);
-        fabPrevious.setOnClickListener(this);
+
         fabPrevious.hide();
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -87,24 +85,15 @@ public class VideoActivity extends AppCompatActivity
             return;
 
         position = (int) data.get(Constant.stepsPosition);
-        stepsBean = data.getParcelableArrayList(Constant.stepsBean);
+        stepsBeanArrayList = data.getParcelableArrayList(Constant.stepsBean);
 
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        int orientation = newConfig.orientation;
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-
-        } else if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-
-        } else
-            Log.w("tag", "other: " + orientation);
-
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(stepsBeanKey, stepsBeanArrayList);
     }
-
 
     @Override
     public void onClick(View view) {
@@ -113,20 +102,20 @@ public class VideoActivity extends AppCompatActivity
                 .findFragmentByTag("VideoFragment");
         videoFragment.releasePlayer();
 
-        if (position == -1 || position > stepsBean.size() - 1) {
+        if (position == -1 || position > stepsBeanArrayList.size() - 1) {
             return;
         }
 
         switch (view.getId()) {
             case R.id.fab_next:
 
-                videoFragment.initAction(stepsBean.get(++position));
+                videoFragment.initAction(stepsBeanArrayList.get(++position));
                 setFabVisibility();
                 break;
 
             case R.id.fab_previous:
 
-                videoFragment.initAction(stepsBean.get(--position));
+                videoFragment.initAction(stepsBeanArrayList.get(--position));
                 setFabVisibility();
                 break;
         }
@@ -135,7 +124,7 @@ public class VideoActivity extends AppCompatActivity
     private void setFabVisibility() {
         if (position == 0) {
             fabPrevious.hide();
-        } else if (position == stepsBean.size() - 1) {
+        } else if (position == stepsBeanArrayList.size() - 1) {
             fabNext.hide();
         } else {
             fabPrevious.show();

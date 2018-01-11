@@ -86,20 +86,24 @@ public class VideoFragment extends Fragment {
         List<BakingModel.StepsBean> stepsBeans = data.getParcelableArrayList(Constant.stepsBean);
 
 
-        if (getResources().getBoolean(R.bool.is_tablet)) { //two pane layout
+        if (getResources().getBoolean(R.bool.is_tablet)) { // tablet
 
             if (savedInstanceState != null) {
-                    playerPosition = savedInstanceState.getLong(Constant.exoplayerPosition);
-                    playerState = savedInstanceState.getBoolean(Constant.playerState);
+
                 position = DetailActivity.stepPosition;
 
             } else {
                 position = 0;
             }
 
-        } else {
+        } else { //normal phone
 
-            position = (int) data.get(Constant.stepsPosition);
+            if (savedInstanceState != null) {
+                position = VideoActivity.position;
+            } else {
+                position = data.getInt(Constant.stepsPosition);
+            }
+
 
             if (((VideoActivity) getActivity()) != null) {
                 if (position == 0) {
@@ -116,6 +120,11 @@ public class VideoFragment extends Fragment {
                 }
             }
 
+        }
+
+        if (savedInstanceState != null) {
+            playerPosition = savedInstanceState.getLong(Constant.exoplayerPosition);
+            playerState = savedInstanceState.getBoolean(Constant.playerState);
         }
 
         initAction(stepsBeans.get(position));
@@ -198,7 +207,11 @@ public class VideoFragment extends Fragment {
                     , extractorsFactory, null, null);
 
 
-            if (position ==DetailActivity.stepPosition) {
+            if (getResources().getBoolean(R.bool.is_tablet)
+                    &&position == DetailActivity.stepPosition) { //For two pane layout to seek to 0 if not equal
+                exoPlayer.seekTo(playerPosition);
+            }else if (!getResources().getBoolean(R.bool.is_tablet)
+                        &&position == VideoActivity.position){
                 exoPlayer.seekTo(playerPosition);
             }
 
@@ -220,6 +233,8 @@ public class VideoFragment extends Fragment {
 
     public void releasePlayer() {
         if (exoPlayer != null) {
+            playerPosition = exoPlayer.getCurrentPosition();
+            playerState = exoPlayer.getPlayWhenReady();
             exoPlayer.stop();
             exoPlayer.release();
             exoPlayer = null;
@@ -231,6 +246,7 @@ public class VideoFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putLong(Constant.exoplayerPosition, exoPlayer.getCurrentPosition());
         outState.putBoolean(Constant.playerState, exoPlayer.getPlayWhenReady());
+        outState.putInt(Constant.stepsPosition, position);
 
     }
 
